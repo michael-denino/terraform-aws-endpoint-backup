@@ -9,6 +9,8 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    # Do not run on forks
+    if: github.repository_owner == 'michael-denino'
     permissions:
       contents: write
       issues: write
