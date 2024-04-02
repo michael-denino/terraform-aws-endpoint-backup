@@ -28,14 +28,16 @@ This AWS Terraform module creates secure infrastructure to backup workstations a
 This module provides a default configuration that does not require inputs.
 ```hcl
 module "endpoint_backup_test" {
-  source = "michael-denino/terraform-aws-endpoint-backup"
+  source  = "michael-denino/endpoint-backup/aws"
+  version = "v1.0.0"
 }
 ```
 
 An example module call using inputs is shown below. Refer to the [Inputs](#inputs) section for a complete list of inputs.
 ```hcl
 module "endpoint_backup_test" {
-  source                   = "michael-denino/terraform-aws-endpoint-backup"
+  source                   = "michael-denino/endpoint-backup/aws"
+  version                  = "v1.0.0"
   bucket_name              = "example-backup"
   transfer_acceleration    = "Enabled"
   object_lock_enabled      = true
