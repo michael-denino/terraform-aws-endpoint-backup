@@ -49,7 +49,7 @@ variable "sse_algorithm" {
 }
 
 variable "kms_key_arn" {
-  description = "Optionally specify a KMS key ARN when using the `aws:kms` sse algorithm"
+  description = "Optionally specify a KMS key ARN when using the `aws:kms` server side encryption algorithm (uses the default AWS managed key `aws/s3` when value is `null`"
   type        = string
   default     = null
 }

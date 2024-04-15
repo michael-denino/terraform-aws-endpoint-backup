@@ -49,6 +49,15 @@ resource "aws_iam_policy" "bucket_access" {
         "Effect" : "Allow",
         "Action" : "s3:ListAllMyBuckets",
         "Resource" : aws_s3_bucket.this.arn
+      },
+      {
+        "Sid" : "AllowKMSActions",
+        "Effect" : "Allow",
+        "Action" : [
+          "kms:Decrypt",
+          "kms:GenerateDataKey"
+        ],
+        "Resource" : var.kms_key_arn != null ? var.kms_key_arn : data.aws_kms_key.aws_s3.arn
       }
     ]
   })

@@ -127,6 +127,7 @@ No modules.
 | [aws_s3_bucket_public_access_block.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 | [aws_s3_bucket_server_side_encryption_configuration.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_kms_key.aws_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_key) | data source |
 
 ## Inputs
 
@@ -139,7 +140,7 @@ No modules.
 | <a name="input_default_lock_days"></a> [default\_lock\_days](#input\_default\_lock\_days) | Default object Lock retention for all new objects when `object_lock_enabled` is set to `true` (`0` disables object locking by default but will still use the lock retention specified by `s3:PutObject` actions) | `number` | `0` | no |
 | <a name="input_iam_path"></a> [iam\_path](#input\_iam\_path) | IAM path identifier | `string` | `"/"` | no |
 | <a name="input_iam_username"></a> [iam\_username](#input\_iam\_username) | IAM username (bucket name used by default) | `list(string)` | <pre>[<br>  "endpoint-backup"<br>]</pre> | no |
-| <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | Optionally specify a KMS key ARN when using the `aws:kms` sse algorithm | `string` | `null` | no |
+| <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | Optionally specify a KMS key ARN when using the `aws:kms` server side encryption algorithm (uses the default AWS managed key `aws/s3` when value is `null` | `string` | `null` | no |
 | <a name="input_logging"></a> [logging](#input\_logging) | S3 bucket server access logging configuration | <pre>object({<br>    enabled       = bool<br>    target_bucket = string<br>    target_prefix = string<br>  })</pre> | <pre>{<br>  "enabled": false,<br>  "target_bucket": null,<br>  "target_prefix": null<br>}</pre> | no |
 | <a name="input_max_compliance_lock_days"></a> [max\_compliance\_lock\_days](#input\_max\_compliance\_lock\_days) | The maximum number of days an S3 object can be locked in compliance mode (does not apply to governance mode) | `number` | `90` | no |
 | <a name="input_object_lock_enabled"></a> [object\_lock\_enabled](#input\_object\_lock\_enabled) | Enable S3 object locking (change forces recreation) | `bool` | `false` | no |
