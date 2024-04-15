@@ -48,7 +48,7 @@ module "endpoint_backup_test" {
 Refer to the `./examples` directory for additional usage examples.
 
 ## S3 Bucket
-This module creates an S3 bucket for use as an backup storage location. The bucket is configured for private access only. This module offers several features which can be enabled such as server access logging, object locking, KMS server-side encryption, and transfer acceleration. Refer to the [inputs](#inputs) section for more information.
+This module creates an S3 bucket for use as an endpoint backup storage location. The bucket is configured for private access only. This module offers several features which can be enabled such as server access logging, object locking, KMS server-side encryption, and transfer acceleration. Refer to the [inputs](#inputs) section for more information.
 
 ### Server Access Logging
 Configure S3 bucket server access logging using an input parameter. A log destination bucket in the same region as the backup bucket is required to store server access logs. Using the same bucket for both the log source and destination creates an infinite loop. Refer to the [logging requests with server access logging](https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html?icmpid=docs_amazons3_console) AWS documentation for more information.
@@ -57,7 +57,9 @@ Configure S3 bucket server access logging using an input parameter. A log destin
 If bucket object locking is desired, it must be enabled via input parameter at the time of bucket creation. If object locking is enabled after bucket creation, it will force the recreation of the resource.
 
 ### Server-Side Encryption
-AES256 server-side encryption is enabled by default. KMS encryption can be enabled via input parameter.
+SSE-S3 (AES256) server-side encryption is enabled by default. SSE-KMS encryption can be enabled via input parameter. When enabling SSE-KMS the AWS managed key `aws/s3` is used by default. Specify a customer managed KMS key via input parameter.
+
+Refer to the [changing your Amazon S3 encryption from S3-Managed to AWS KMS](https://aws.amazon.com/blogs/storage/changing-your-amazon-s3-encryption-from-s3-managed-encryption-sse-s3-to-aws-key-management-service-sse-kms/) documentation for more information about the differences between SSE-S3 and SSE-KMS.
 
 ### Bucket Policy
 The bucket policy requires all bucket communications use TLS 1.2 or greater and limits compliance mode object locks to a specified duration.
@@ -71,7 +73,11 @@ The object lock restriction does not apply to objects locks using governance mod
 Refer to the [using S3 Object Lock](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html) and [Object Lock considerations](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock-managing.html) documentation for more information.
 
 ## IAM Credentials
-Generating persistent IAM user access keys is typically not advised ([security best practices in IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)). However, the endpoint backup software this module is designed to integrate with requires an access key ID and secret access key. This module can create an IAM user and IAM policy that only grants read and write access to the backup bucket. Enabling client-side encryption is recommended to enhance data privacy and as an additional layer of security if IAM keys are compromised.
+Generating persistent IAM user access keys is typically not advised ([security best practices in IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)). However, the endpoint backup software this module is designed to integrate with requires an access key ID and secret access key. Creating persistent IAM user access keys is acceptable for this use case.
+
+This module can create an IAM policy that grants read/write access to the backup bucket and decrypt/encrypt KMS actions for a customer managed KMS key (if a KMS key is provided as an input). This module also creates an IAM user by default and attaches the bucket access policy to the user.
+
+Enabling client-side encryption is recommended to enhance data privacy and as an additional layer of security if IAM keys are compromised.
 
 This module provides input variables to configure IAM access key generation. Rotate IAM user keys on a regular basis.
 
