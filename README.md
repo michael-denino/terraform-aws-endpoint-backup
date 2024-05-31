@@ -25,11 +25,13 @@ Terraform AWS module to create the S3 and IAM resources needed for endpoint back
 This AWS Terraform module creates secure infrastructure to backup workstations and on-premise servers. This module is compatible with endpoint backup software such as [Arq](https://www.arqbackup.com/index.html), [MSP360 Standalone Backup](https://www.msp360.com/cloudberry-products/) (Formerly CloudBerry Backup), and other solutions that integrate with AWS S3. This infrastructure is also compatible with [CloudBerry Explorer](https://www.msp360.com/explorer/mac/), which allows mounting S3 as a remote drive. This module is not affiliated with any backup software.
 
 ## Usage
+>Replace `<VERSION>` with a semantic version when using the module.
+
 This module provides a default configuration that does not require inputs.
 ```hcl
 module "endpoint_backup_test" {
   source  = "michael-denino/endpoint-backup/aws"
-  version = "1.0.1"
+  version = "<VERSION>"
 }
 ```
 
@@ -37,7 +39,7 @@ An example module call using inputs is shown below. Refer to the [Inputs](#input
 ```hcl
 module "endpoint_backup_test" {
   source                = "michael-denino/endpoint-backup/aws"
-  version               = "1.0.1"
+  version               = "<VERSION>"
   bucket_name           = "example-backup"
   transfer_acceleration = "Enabled"
   object_lock_enabled   = true
