@@ -108,3 +108,15 @@ variable "max_compliance_lock_days" {
     EOF
   }
 }
+
+variable "abort_incomplete_uploads" {
+  description = "Abort incomplete multipart uploads S3 bucket lifecycle rule (status must be `Enabled` or `Disabled`)"
+  type = object({
+    status                = string
+    days_after_initiation = number
+  })
+  default = {
+    status                = "Enabled"
+    days_after_initiation = 7
+  }
+}

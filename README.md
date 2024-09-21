@@ -74,6 +74,13 @@ The object lock restriction does not apply to objects locks using governance mod
 
 Refer to the [using S3 Object Lock](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html) and [Object Lock considerations](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock-managing.html) documentation for more information.
 
+### Lifecycle Rules
+This module enables an S3 bucket lifecycle rule to abort incomplete multipart uploads. This lifecycle rule can reduce unnecessary storage costs by stopping incomplete multipart uploads and deleting failed upload parts after a specified number of days.
+
+This module includes an optional input variable to disable the abort incomplete multipart uploads lifecycle rule and modify the number of days after which S3 aborts an incomplete multipart upload.
+
+Refer to the [delete incomplete multipart uploads](https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpu-abort-incomplete-mpu-lifecycle-config.html) AWS documentation for more information.
+
 ## IAM Credentials
 Generating persistent IAM user access keys is typically not advised ([security best practices in IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)). However, the endpoint backup software this module is designed to integrate with requires an access key ID and secret access key. Creating persistent IAM user access keys is acceptable for this use case.
 
@@ -129,6 +136,7 @@ No modules.
 | [aws_iam_user_policy_attachment.bucket_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user_policy_attachment) | resource |
 | [aws_s3_bucket.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket_accelerate_configuration.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_accelerate_configuration) | resource |
+| [aws_s3_bucket_lifecycle_configuration.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration) | resource |
 | [aws_s3_bucket_logging.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_logging) | resource |
 | [aws_s3_bucket_object_lock_configuration.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_object_lock_configuration) | resource |
 | [aws_s3_bucket_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
@@ -141,15 +149,16 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_abort_incomplete_uploads"></a> [abort\_incomplete\_uploads](#input\_abort\_incomplete\_uploads) | Abort incomplete multipart uploads S3 bucket lifecycle rule (status must be `Enabled` or `Disabled`) | <pre>object({<br/>    status                = string<br/>    days_after_initiation = number<br/>  })</pre> | <pre>{<br/>  "days_after_initiation": 7,<br/>  "status": "Enabled"<br/>}</pre> | no |
 | <a name="input_bucket_append_account_id"></a> [bucket\_append\_account\_id](#input\_bucket\_append\_account\_id) | Append the AWS account ID to the S3 bucket name | `bool` | `true` | no |
 | <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | S3 bucket name, also used for IAM username and policy name | `string` | `"endpoint-backup"` | no |
 | <a name="input_create_access_keys"></a> [create\_access\_keys](#input\_create\_access\_keys) | Create IAM user access keys | `bool` | `false` | no |
 | <a name="input_create_iam_user"></a> [create\_iam\_user](#input\_create\_iam\_user) | Create IAM user | `bool` | `true` | no |
 | <a name="input_default_lock_days"></a> [default\_lock\_days](#input\_default\_lock\_days) | Default object Lock retention for all new objects when `object_lock_enabled` is set to `true` (`0` disables object locking by default but will still use the lock retention specified by `s3:PutObject` actions) | `number` | `0` | no |
 | <a name="input_iam_path"></a> [iam\_path](#input\_iam\_path) | IAM path identifier | `string` | `"/"` | no |
-| <a name="input_iam_username"></a> [iam\_username](#input\_iam\_username) | IAM username (bucket name used by default) | `list(string)` | <pre>[<br>  "endpoint-backup"<br>]</pre> | no |
+| <a name="input_iam_username"></a> [iam\_username](#input\_iam\_username) | IAM username (bucket name used by default) | `list(string)` | <pre>[<br/>  "endpoint-backup"<br/>]</pre> | no |
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | Optionally specify a KMS key ARN when using the `aws:kms` server side encryption algorithm (uses the default AWS managed key `aws/s3` when value is `null` | `string` | `null` | no |
-| <a name="input_logging"></a> [logging](#input\_logging) | S3 bucket server access logging configuration | <pre>object({<br>    enabled       = bool<br>    target_bucket = string<br>    target_prefix = string<br>  })</pre> | <pre>{<br>  "enabled": false,<br>  "target_bucket": null,<br>  "target_prefix": null<br>}</pre> | no |
+| <a name="input_logging"></a> [logging](#input\_logging) | S3 bucket server access logging configuration | <pre>object({<br/>    enabled       = bool<br/>    target_bucket = string<br/>    target_prefix = string<br/>  })</pre> | <pre>{<br/>  "enabled": false,<br/>  "target_bucket": null,<br/>  "target_prefix": null<br/>}</pre> | no |
 | <a name="input_max_compliance_lock_days"></a> [max\_compliance\_lock\_days](#input\_max\_compliance\_lock\_days) | The maximum number of days an S3 object can be locked in compliance mode (does not apply to governance mode) | `number` | `90` | no |
 | <a name="input_object_lock_enabled"></a> [object\_lock\_enabled](#input\_object\_lock\_enabled) | Enable S3 object locking (change forces recreation) | `bool` | `false` | no |
 | <a name="input_pgp_key"></a> [pgp\_key](#input\_pgp\_key) | Base-64 encoded PGP public key or Keybase username (`keybase:username`) | `string` | `null` | no |
