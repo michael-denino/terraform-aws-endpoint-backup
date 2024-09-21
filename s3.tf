@@ -89,3 +89,14 @@ resource "aws_s3_bucket_object_lock_configuration" "this" {
     }
   }
 }
+
+resource "aws_s3_bucket_lifecycle_configuration" "this" {
+  bucket = aws_s3_bucket.this.id
+  rule {
+    id     = "AbortIncompleteMultipartUploads"
+    status = var.abort_incomplete_uploads.status
+    abort_incomplete_multipart_upload {
+      days_after_initiation = var.abort_incomplete_uploads.days_after_initiation
+    }
+  }
+}

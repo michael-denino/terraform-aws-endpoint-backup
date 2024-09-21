@@ -11,7 +11,7 @@ repos:
       - id: check-added-large-files
 
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.90.0
+    rev: v1.96.1
     hooks:
       - id: terraform_fmt
         args:
@@ -24,6 +24,6 @@ repos:
           - --args=--config=__GIT_WORKING_DIR__/.tflint.hcl
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.28.4
+    rev: 0.29.2
     hooks:
       - id: check-github-workflows
