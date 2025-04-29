@@ -9,6 +9,7 @@ Terraform AWS module to create the S3 and IAM resources needed for endpoint back
   - [Object Locking](#object-locking)
   - [Server-Side Encryption](#server-side-encryption)
   - [Bucket Policy](#bucket-policy)
+  - [Lifecycle Rules](#lifecycle-rules)
 - [IAM Credentials](#iam-credentials)
   - [Out of Band Key Generation](#out-of-band-key-generation)
   - [Terraform Key Generation](#terraform-key-generation)
