@@ -98,5 +98,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
     abort_incomplete_multipart_upload {
       days_after_initiation = var.abort_incomplete_uploads.days_after_initiation
     }
+    filter {
+      prefix = ""
+    }
   }
 }
