@@ -1,7 +1,13 @@
-variable "bucket_name" {
-  description = "S3 bucket name, also used for IAM username and policy name"
-  type        = string
-  default     = "endpoint-backup"
+variable "abort_incomplete_uploads" {
+  description = "Abort incomplete multipart uploads S3 bucket lifecycle rule (status must be `Enabled` or `Disabled`)"
+  type = object({
+    status                = string
+    days_after_initiation = number
+  })
+  default = {
+    days_after_initiation = 7
+    status                = "Enabled"
+  }
 }
 
 variable "bucket_append_account_id" {
@@ -10,48 +16,10 @@ variable "bucket_append_account_id" {
   default     = true
 }
 
-variable "iam_username" {
-  description = "IAM username (bucket name used by default)"
-  type        = list(string)
-  default     = ["endpoint-backup"]
-}
-
-variable "iam_path" {
-  description = "IAM path identifier"
+variable "bucket_name" {
+  description = "S3 bucket name, also used for IAM username and policy name"
   type        = string
-  default     = "/"
-}
-
-variable "transfer_acceleration" {
-  description = "S3 transfer acceleration (`Enabled` or `Suspended`)"
-  type        = string
-  default     = "Suspended"
-}
-
-variable "logging" {
-  description = "S3 bucket server access logging configuration"
-  type = object({
-    enabled       = bool
-    target_bucket = string
-    target_prefix = string
-  })
-  default = {
-    enabled       = false
-    target_bucket = null
-    target_prefix = null
-  }
-}
-
-variable "sse_algorithm" {
-  description = "S3 server side encryption algorithm (`AES256` or `aws:kms`)"
-  type        = string
-  default     = "AES256"
-}
-
-variable "kms_key_arn" {
-  description = "Optionally specify a KMS key ARN when using the `aws:kms` server side encryption algorithm (uses the default AWS managed key `aws/s3` when value is `null`"
-  type        = string
-  default     = null
+  default     = "endpoint-backup"
 }
 
 variable "create_access_keys" {
@@ -66,28 +34,42 @@ variable "create_iam_user" {
   default     = true
 }
 
-variable "pgp_key" {
-  description = "Base-64 encoded PGP public key or Keybase username (`keybase:username`)"
-  type        = string
-  default     = null
-}
-
-variable "pgp_key_path" {
-  description = "Path to a base-64 encoded PGP public key file"
-  type        = string
-  default     = null
-}
-
-variable "object_lock_enabled" {
-  description = "Enable S3 object locking (change forces recreation)"
-  type        = bool
-  default     = false
-}
-
 variable "default_lock_days" {
   description = "Default object Lock retention for all new objects when `object_lock_enabled` is set to `true` (`0` disables object locking by default but will still use the lock retention specified by `s3:PutObject` actions)"
   type        = number
   default     = 0
+}
+
+variable "iam_path" {
+  description = "IAM path identifier"
+  type        = string
+  default     = "/"
+}
+
+variable "iam_username" {
+  description = "IAM username (bucket name used by default)"
+  type        = list(string)
+  default     = ["endpoint-backup"]
+}
+
+variable "kms_key_arn" {
+  description = "Optionally specify a KMS key ARN when using the `aws:kms` server side encryption algorithm (uses the default AWS managed key `aws/s3` when value is `null`"
+  type        = string
+  default     = null
+}
+
+variable "logging" {
+  description = "S3 bucket server access logging configuration"
+  type = object({
+    enabled       = bool
+    target_bucket = string
+    target_prefix = string
+  })
+  default = {
+    enabled       = false
+    target_bucket = null
+    target_prefix = null
+  }
 }
 
 variable "max_compliance_lock_days" {
@@ -109,14 +91,32 @@ variable "max_compliance_lock_days" {
   }
 }
 
-variable "abort_incomplete_uploads" {
-  description = "Abort incomplete multipart uploads S3 bucket lifecycle rule (status must be `Enabled` or `Disabled`)"
-  type = object({
-    status                = string
-    days_after_initiation = number
-  })
-  default = {
-    status                = "Enabled"
-    days_after_initiation = 7
-  }
+variable "object_lock_enabled" {
+  description = "Enable S3 object locking (change forces recreation)"
+  type        = bool
+  default     = false
+}
+
+variable "pgp_key" {
+  description = "Base-64 encoded PGP public key or Keybase username (`keybase:username`)"
+  type        = string
+  default     = null
+}
+
+variable "pgp_key_path" {
+  description = "Path to a base-64 encoded PGP public key file"
+  type        = string
+  default     = null
+}
+
+variable "sse_algorithm" {
+  description = "S3 server side encryption algorithm (`AES256` or `aws:kms`)"
+  type        = string
+  default     = "AES256"
+}
+
+variable "transfer_acceleration" {
+  description = "S3 transfer acceleration (`Enabled` or `Suspended`)"
+  type        = string
+  default     = "Suspended"
 }
