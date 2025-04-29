@@ -150,7 +150,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_abort_incomplete_uploads"></a> [abort\_incomplete\_uploads](#input\_abort\_incomplete\_uploads) | Abort incomplete multipart uploads S3 bucket lifecycle rule (status must be `Enabled` or `Disabled`) | <pre>object({<br/>    status                = string<br/>    days_after_initiation = number<br/>  })</pre> | <pre>{<br/>  "days_after_initiation": 7,<br/>  "status": "Enabled"<br/>}</pre> | no |
+| <a name="input_abort_incomplete_uploads"></a> [abort\_incomplete\_uploads](#input\_abort\_incomplete\_uploads) | Abort incomplete multipart uploads S3 bucket lifecycle rule (status must be `Enabled` or `Disabled`) | <pre>object({<br/>    days_after_initiation = number<br/>    status                = string<br/>  })</pre> | <pre>{<br/>  "days_after_initiation": 7,<br/>  "status": "Enabled"<br/>}</pre> | no |
 | <a name="input_bucket_append_account_id"></a> [bucket\_append\_account\_id](#input\_bucket\_append\_account\_id) | Append the AWS account ID to the S3 bucket name | `bool` | `true` | no |
 | <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | S3 bucket name, also used for IAM username and policy name | `string` | `"endpoint-backup"` | no |
 | <a name="input_create_access_keys"></a> [create\_access\_keys](#input\_create\_access\_keys) | Create IAM user access keys | `bool` | `false` | no |
